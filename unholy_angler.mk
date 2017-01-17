@@ -19,7 +19,7 @@ TARGET_SCREEN_HEIGHT := 2560
 TARGET_SCREEN_WIDTH := 1440
 
 # Inherit common unholiness
-$(call inherit-product, vendor/unholy/configs/common_phone.mk.mk)
+$(call inherit-product, vendor/unholy/configs/common_phone.mk)
 $(call inherit-product, vendor/unholy/products/common.mk)
 
 # Override AOSP build properties
