@@ -130,7 +130,7 @@
 
     <!-- Does the notification LED support multiple colors?
          Used to decide if the user can change the colors -->
-    <bool name="config_multiColorNotificationLed">true</bool>
+    <!-- <bool name="config_multiColorNotificationLed">true</bool> -->
 
     <!-- Default color for notification LED is white. -->
     <color name="config_defaultNotificationColor">#ffffffff</color>
@@ -143,11 +143,11 @@
 
     <!-- Is the battery LED intrusive?
          Used to decide if there should be a disable option -->
-    <bool name="config_intrusiveBatteryLed">true</bool>
+    <!-- <bool name="config_intrusiveBatteryLed">true</bool> -->
 
     <!-- Does the battery LED support multiple colors?
          Used to decide if the user can change the colors -->
-    <bool name="config_multiColorBatteryLed">true</bool>
+    <!-- <bool name="config_multiColorBatteryLed">true</bool> -->
 
     <!-- reference volume index for music stream to limit headphone volume and display warning -->
     <integer name="config_safe_media_volume_index">4</integer>
@@ -430,7 +430,7 @@
     <!-- Enable the option to check proximity sensor when deciding whether to
          turn the screen on
          NOTE ! - Enable for devices that have a fast response proximity sensor -->
-    <bool name="config_proximityCheckOnWake">true</bool>
-    <integer name="config_proximityCheckTimeout">300</integer>
+    <!-- <bool name="config_proximityCheckOnWake">true</bool>
+    <integer name="config_proximityCheckTimeout">300</integer> -->
 
 </resources>
