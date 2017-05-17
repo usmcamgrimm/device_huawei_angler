@@ -103,6 +103,9 @@ get-set-forall  /sys/class/devfreq/qcom,cpubw*/governor bw_hwmon
 # Disable sched_boost
 write /proc/sys/kernel/sched_boost 0
 
+# Enable fingerprint boost
+write /sys/kernel/fp_boost/enabled 1
+
 # make sure thermal is set
 write /sys/module/msm_thermal/core_control/enabled 0
 restorecon -R /sys/module/msm_thermal
