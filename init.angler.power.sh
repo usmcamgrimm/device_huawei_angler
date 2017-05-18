@@ -20,19 +20,22 @@ function get-set-forall() {
 
 ################################################################################
 
-# disable core control
-chmod 0664 /sys/module/msm_thermal/core_control/enabled
+# disable thermal bcl hotplug to switch governor
 write /sys/module/msm_thermal/core_control/enabled 0
+get-set-forall /sys/devices/soc.0/qcom,bcl.*/mode disable
+bcl_hotplug_mask=`get-set-forall /sys/devices/soc.0/qcom,bcl.*/hotplug_mask 0`
+bcl_hotplug_soc_mask=`get-set-forall /sys/devices/soc.0/qcom,bcl.*/hotplug_soc_mask 0`
+get-set-forall /sys/devices/soc.0/qcom,bcl.*/mode enable
+
 # some files in /sys/devices/system/cpu are created after the restorecon of
 # /sys/. These files receive the default label "sysfs".
 # Restorecon again to give new files the correct label.
 restorecon -R /sys/devices/system/cpu
 
-# Thermal control
-restorecon -R /sys/module/msm_thermal
-chmod 0664 /sys/module/msm_thermal/parameters/enabled
-write /sys/module/msm_thermal/parameters/enabled Y
-write /sys/module/msm_thermal/parameters/limit_temp_degC 68
+# ensure at most one A57 is online when thermal hotplug is disabled
+write /sys/devices/system/cpu/cpu5/online 0
+write /sys/devices/system/cpu/cpu6/online 0
+write /sys/devices/system/cpu/cpu7/online 0
 
 #LITTLE
 write /sys/devices/system/cpu/cpu0/online 1
@@ -85,8 +88,12 @@ write /sys/devices/system/cpu/cpu7/cpufreq/scaling_min_freq 302400
 write /sys/devices/system/cpu/cpu7/cpufreq/scaling_max_freq 1958400
 
 # input boost configuration
-write /sys/module/cpu_boost/parameters/input_boost_freq
-write /sys/module/cpu_boost/parameters/input_boost_ms 40
+write /sys/module/cpu_boost/parameters/input_boost_enabled 1
+write /sys/module/cpu_boost/parameters/boost_ms 40
+write /sys/module/cpu_boost/parameters/input_boost_freq "0:600000 1:672000 2:0 3:0 4:0 5:0 6:0 7:0"
+write /sys/module/cpu_boost/parameters/input_boost_ms 30
+write /sys/module/cpu_boost/parameters/load_based_syncs Y
+write /sys/module/cpu_boost/parameters/sync_threshold 1248000
 
 # Setting B.L scheduler parameters
 write /proc/sys/kernel/sched_migration_fixup 1
@@ -106,12 +113,12 @@ write /proc/sys/kernel/sched_boost 0
 # Enable fingerprint boost
 write /sys/kernel/fp_boost/enabled 1
 
-# make sure thermal is set
-write /sys/module/msm_thermal/core_control/enabled 0
-restorecon -R /sys/module/msm_thermal
-chmod 0664 /sys/module/msm_thermal/parameters/enabled
-write /sys/module/msm_thermal/parameters/enabled Y
-write /sys/module/msm_thermal/parameters/limit_temp_degC 68
+# re-enable thermal and BCL hotplug
+write /sys/module/msm_thermal/core_control/enabled 1
+get-set-forall /sys/devices/soc.0/qcom,bcl.*/mode disable
+get-set-forall /sys/devices/soc.0/qcom,bcl.*/hotplug_mask $bcl_hotplug_mask
+get-set-forall /sys/devices/soc.0/qcom,bcl.*/hotplug_soc_mask $bcl_hotplug_soc_mask
+get-set-forall /sys/devices/soc.0/qcom,bcl.*/mode enable
 
 # change GPU initial power level from 305MHz(level 4) to 180MHz(level 5) for power savings
 write /sys/class/kgsl/kgsl-3d0/default_pwrlevel 5
