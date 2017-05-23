@@ -444,4 +444,6 @@
     <!-- Enable system navigation keys. -->
     <bool name="config_supportSystemNavigationKeys">true</bool>
 
+    <!-- Whether the device needs axis inversion for the fingerprint notification panel gesture when rotated -->
+    <bool name="config_needsFingerprintAxisInversion">true</bool>
 </resources>
